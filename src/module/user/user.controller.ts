@@ -54,12 +54,28 @@ const getSingleUser = async (req: Request, res: Response) => {
 const updateUser = async (req: Request, res: Response) => {
     try {
         const { id } = req.params
-        const payload = req.body
+        const data = req.body
 
-        const result = await userService.updateUserToDB(id, payload)
+        const result = await userService.updateUserToDB(id, data)
         res.send({
             message: "User update successfully",
             data: result
+        })
+    } catch (err) {
+        res.json({
+            status: false,
+            message: 'Something went wrong',
+            err
+        })
+    }
+}
+const deleteUser = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params
+        await userService.deleteUserFromDB(id)
+        res.send({
+            message: "User delete successfully",
+       
         })
     } catch (err) {
         res.json({
@@ -74,5 +90,6 @@ export const userController = {
     createUser,
     getAllUsers,
     getSingleUser,
-    updateUser
+    updateUser,
+    deleteUser
 }
