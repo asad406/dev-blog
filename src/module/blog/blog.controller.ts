@@ -11,8 +11,8 @@ const createBlog = catchAsync(async (req, res) => {
     sendResponse(res, { statusCode: StatusCodes.CREATED, message: "Blog create successfully", data: result })
 })
 
-const getAllBlog = catchAsync(async (req: Request, res: Response) => {
-    const result = await blogService.getAllBlogFromDB()
+const getAllBlog = catchAsync(async (req: Request, res: Response) => {  
+    const result = await blogService.getAllBlogFromDB(req.query)
     sendResponse(res, { statusCode: StatusCodes.OK, message: "Blogs retrieved successfully", data: result })
 })
 
