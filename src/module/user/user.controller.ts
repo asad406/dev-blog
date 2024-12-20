@@ -1,90 +1,39 @@
 import { Request, Response } from "express";
 import { userService } from "./user.service";
+import sendResponse from "../../utils/sendResponse";
+import { StatusCodes } from 'http-status-codes';
+import catchAsync from "../../utils/catchAsync";
 
-const createUser = async (req: Request, res: Response) => {
-    try {
-        const payload = req.body
-        const result = await userService.createUserIntoDB(payload)
-        res.json({
-            message: "User create successfully",
-            data: result
-        })
-    } catch (err) {
-        res.json({
-            status: false,
-            message: 'Something went wrong',
-            err
-        })
-     
-    }
-}
-const getAllUsers = async (req: Request, res: Response) => {
-    try {
 
-        const result = await userService.getUserFromDB()
-        res.send({
-            message: "Users retrieved successfully",
-            data: result
-        })
-    } catch (err) {
-        res.json({
-            status: false,
-            message: 'Something went wrong',
-            err
-        })
-    }
-}
-const getSingleUser = async (req: Request, res: Response) => {
-    try {
-        const { id } = req.params
-     
-        const result = await userService.getSingleUserFromDB(id)
-        res.send({
-            message: "User retrieved successfully",
-            data: result
-        })
-    } catch (err) {
-        res.json({
-            status: false,
-            message: 'Something went wrong',
-            err
-        })
-    }
-}
-const updateUser = async (req: Request, res: Response) => {
-    try {
-        const { id } = req.params
-        const data = req.body
+const createUser = catchAsync(async (req, res) => {
+    const payload = req.body
+    const result = await userService.createUserIntoDB(payload)
+    sendResponse(res, { statusCode: StatusCodes.CREATED, message: "User create successfully", data: result })
+})
 
-        const result = await userService.updateUserToDB(id, data)
-        res.send({
-            message: "User update successfully",
-            data: result
-        })
-    } catch (err) {
-        res.json({
-            status: false,
-            message: 'Something went wrong',
-            err
-        })
-    }
-}
-const deleteUser = async (req: Request, res: Response) => {
-    try {
-        const { id } = req.params
-        await userService.deleteUserFromDB(id)
-        res.send({
-            message: "User delete successfully",
-       
-        })
-    } catch (err) {
-        res.json({
-            status: false,
-            message: 'Something went wrong',
-            err
-        })
-    }
-}
+const getAllUsers = catchAsync(async (req: Request, res: Response) => {
+    const result = await userService.getUserFromDB()
+    sendResponse(res, { statusCode: StatusCodes.OK, message: "Users retrieved successfully", data: result })
+})
+
+const getSingleUser = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params
+    const result = await userService.getSingleUserFromDB(id)
+    sendResponse(res, { statusCode: StatusCodes.OK, message: 'User retrieved successfully', data: result })
+})
+
+const updateUser = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params
+    const data = req.body
+    const result = await userService.updateUserToDB(id, data)
+    sendResponse(res, { statusCode: StatusCodes.OK, message: "User update successfully", data: result })
+})
+
+const deleteUser = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params
+    await userService.deleteUserFromDB(id)
+    sendResponse(res, { statusCode: StatusCodes.OK, message: "User delete successfully" })
+})
 
 export const userController = {
     createUser,

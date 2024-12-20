@@ -32,6 +32,11 @@ const userSchema = new Schema<IUser>({
         timestamps: true
     }
 )
+//pre hook use to show isBlocked false user only
+userSchema.pre('find', function(this, next){
+    this.find({isBlocked: {$eq: 'false'}})
+    next()
+})
 
 const User = model<IUser>('User', userSchema)
 export default User
