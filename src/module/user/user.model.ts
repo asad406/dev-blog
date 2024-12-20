@@ -1,5 +1,7 @@
 import { model, Schema } from "mongoose";
 import IUser from "./user.interface";
+import bcrypt from 'bcrypt'
+import config from "../../config";
 
 const userSchema = new Schema<IUser>({
     name: {
@@ -33,24 +35,35 @@ const userSchema = new Schema<IUser>({
     }
 )
 //pre hook use to show isBlocked false user only
-userSchema.pre('find', function(this, next){
-    this.find({isBlocked: {$eq: 'false'}})
+userSchema.pre('find', function (this, next) {
+    this.find({ isBlocked: { $eq: 'false' } })
     next()
 })
 
-userSchema.post('find', function (docs) {
+//for password hashing
+userSchema.pre('save', async function (this, next) {
+    this.password = await bcrypt.hash(this.password, Number(config.bcrypt_salt_round))
+    next()
+})
+userSchema.post('save', async function (doc, next) {
+    doc.password = ""
+    next()
+})
+
+userSchema.post('find', function (docs, next) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     docs.forEach((doc: any) => {
-      doc.toJSON = function () {
-        return {
-          name: this.name,
-          email: this.email
+        doc.toJSON = function () {
+            return {
+                name: this.name,
+                email: this.email
+            };
         };
-      };
     });
-  });
-  
+    next()
+});
 
-  
+
+
 const User = model<IUser>('User', userSchema)
 export default User
