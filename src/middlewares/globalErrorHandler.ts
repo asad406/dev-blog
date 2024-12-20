@@ -2,19 +2,36 @@
 import { NextFunction, Request, Response } from "express"
 import { StatusCodes } from "http-status-codes"
 import config from "../config"
+import { TErrorSource } from "../interface/error"
+import { ZodError } from "zod"
+import handleZodError from "../errors/handleZodError"
 
 
-// type TErrorResponse = {
-//     success: boolean,
-//     message: string,
-//     statusCode: number,
-//     error: any
-    
-// }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const globalErrorHandler = (err: any, req: Request, res: Response, _next: NextFunction) => {
-    res.status(StatusCodes.BAD_REQUEST).json({ success: false, message: err.message, statusCode: StatusCodes.BAD_REQUEST, error: err, stack: config.NODE_ENV === 'development' ? err?.stack : null, })
+  let statusCode = 500
+  let message = "Something went wrong"
+
+  let errorSource: TErrorSource = [{
+    path: '',
+    message: "Something went wrong"
+  }]
+
+  if (err instanceof ZodError) {
+    const simplifiedError = handleZodError(err)
+    statusCode = simplifiedError.statusCode
+    message = simplifiedError.message
+    errorSource = simplifiedError.errorSource
+  }
+
+  res.status(StatusCodes.BAD_REQUEST).json({
+    success: false,
+    message,
+    statusCode,
+    error: err,
+    stack: config.NODE_ENV === 'development' ? err?.stack : null,
+  })
 }
 
 
