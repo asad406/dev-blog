@@ -31,5 +31,21 @@ blogSchema.pre('find', function(this, next){
     next()
 })
 
+blogSchema.post('find', function (docs) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    docs.forEach((doc: any) => {
+      doc.toJSON = function () {
+        return {
+          _id: this._id,
+          title: this.title,
+          content: this.content,
+          author: this.author
+        };
+      };
+    });
+  });
+  
+ 
+
 const Blog = model<IBlog>('Blog', blogSchema)
 export default Blog

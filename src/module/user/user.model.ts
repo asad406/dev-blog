@@ -38,5 +38,19 @@ userSchema.pre('find', function(this, next){
     next()
 })
 
+userSchema.post('find', function (docs) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    docs.forEach((doc: any) => {
+      doc.toJSON = function () {
+        return {
+          name: this.name,
+          email: this.email
+        };
+      };
+    });
+  });
+  
+
+  
 const User = model<IUser>('User', userSchema)
 export default User
