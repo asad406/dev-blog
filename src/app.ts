@@ -3,6 +3,7 @@ import cors from 'cors'
 import userRouter from './module/user/user.router'
 
 import { globalErrorHandler } from './middlewares/globalErrorHandler'
+import notFound from './middlewares/notFound'
 
 const app = express()
 
@@ -17,5 +18,6 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 app.use(globalErrorHandler)
+app.use(notFound)
 export default app
 

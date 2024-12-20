@@ -25,7 +25,7 @@ export const globalErrorHandler = (err: any, req: Request, res: Response, _next:
     errorSource = simplifiedError.errorSource
   }
 
-  res.status(StatusCodes.BAD_REQUEST).json({
+  res.status(statusCode).json({
     success: false,
     message,
     statusCode,
