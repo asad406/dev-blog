@@ -13,8 +13,8 @@ app.use(express.json())
 app.use(cors())
 
 app.use('/api/auth', authRouter)
-app.use('/api/user', userRouter)
-app.use('/api/blog', blogRouter)
+app.use('/api/admin', userRouter)
+app.use('/api/blogs', blogRouter)
 
 app.get('/', (req: Request, res: Response) => {
     res.send({

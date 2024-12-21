@@ -2,13 +2,21 @@ import { Router } from "express";
 import { userController } from "./user.controller";
 import validateRequest from "../../middlewares/validateRequest";
 import { userValidation } from "./user.validation";
+import auth from "../../middlewares/auth";
+import { blogController } from "../blog/blog.controller";
 
 const userRouter = Router()
 
-userRouter.post('/create-user',validateRequest(userValidation.userValidationSchema), userController.createUser)
-userRouter.get('/', userController.getAllUsers)
+userRouter.post('/create-admin',validateRequest(userValidation.userValidationSchema), userController.createUser)
 userRouter.get('/:id', userController.getSingleUser)
-userRouter.patch('/:id',validateRequest(userValidation.updateUserValidationSchema), userController.updateUser)
-userRouter.delete('/:id', userController.deleteUser)
+userRouter.patch('/users/:id/block',auth('admin'),validateRequest(userValidation.updateUserValidationSchema), userController.updateUser)
+userRouter.delete('/blogs/:id',auth('admin'),blogController.deleteBlog)
+userRouter.get('/',auth('admin'), userController.getAllUsers)
 
 export default userRouter
+
+/*
+app.use('/api/auth', authRouter)
+app.use('/api/admin', userRouter)
+app.use('/api/blog', blogRouter)
+*/

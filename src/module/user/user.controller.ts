@@ -3,6 +3,7 @@ import { userService } from "./user.service";
 import sendResponse from "../../utils/sendResponse";
 import { StatusCodes } from 'http-status-codes';
 import catchAsync from "../../utils/catchAsync";
+import { blogService } from "../blog/blog.service";
 
 
 const createUser = catchAsync(async (req, res) => {
@@ -24,15 +25,16 @@ const getSingleUser = catchAsync(async (req: Request, res: Response) => {
 
 const updateUser = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params
-    const data = req.body
-    const result = await userService.updateUserToDB(id, data)
-    sendResponse(res, { statusCode: StatusCodes.OK, message: "User update successfully", data: result })
+    const data = { isBlocked: true }
+    await userService.updateUserToDB(id, data)
+    sendResponse(res, { statusCode: StatusCodes.OK, message: "User blocked successfully" })
 })
 
 const deleteUser = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params
-    await userService.deleteUserFromDB(id)
-    sendResponse(res, { statusCode: StatusCodes.OK, message: "User delete successfully" })
+    const data = { isPublished: false }
+    await blogService.deleteBlogFromDB(id, data)
+    sendResponse(res, { statusCode: StatusCodes.OK, message: "User blocked successfully" })
 })
 
 export const userController = {
