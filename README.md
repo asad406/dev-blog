@@ -7,15 +7,16 @@ My Dev Blog Server lets users create, update, delete, and view blog posts. It fe
 ## Features
 
 - **As Admin**:
-- Can delete any blog.
-- Can block any user.
+- [x] Can delete any blog.
+- [x] Can block any user.
 
 - **As User**: 
-- Can register and log in.
-- Can create blogs (only when logged in).
-- Can update and delete their own blogs.
+- [x] Can register and log in.
+- [x] Can create blogs (only when logged in).
+- [x] Can update and delete their own blogs.
 
-- **Validation and Error Handling**: Ensure data validation using mongoose and zod validation and feedback suitable Error.
+- **Validation and Error Handling**: 
+- [x] Ensure data validation using mongoose and zod validation and feedback suitable Error.
 
 ## Used Technology and Installation instruction
 
@@ -25,6 +26,9 @@ My Dev Blog Server lets users create, update, delete, and view blog posts. It fe
 - Mongoose (`npm i mongoose`)
 - Dotenv (`npm i dotenv`)
 - Cors (`npm i cors`)
+- Zod (`npm i zod`)
+- jwt (`npm i jsonwebtoken`)
+- bcrypt (`npm i bcrypt`)
 
 ### Some development dependencies
 
