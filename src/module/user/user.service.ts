@@ -18,8 +18,7 @@ const updateUserToDB = async (id: string, data:Partial<IUser>) => {
     const result = await User.findByIdAndUpdate(id, data, { new: true, runValidators: true })
     return result
 }
-const deleteUserFromDB = async (id: string, data:Partial<IUser>) => {
-    
+const deleteUserFromDB = async (id: string, data:Partial<IUser>) => {    
     const result = await User.findByIdAndUpdate(id, data, { new: true, runValidators: true })
     return result
 }
