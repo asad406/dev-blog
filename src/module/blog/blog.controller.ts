@@ -3,12 +3,26 @@ import { blogService } from "./blog.service";
 import sendResponse from "../../utils/sendResponse";
 import { StatusCodes } from 'http-status-codes';
 import catchAsync from "../../utils/catchAsync";
+import getUserIdFromToken from "./blog.constant";
+// import User from "../user/user.model";
 
 
 const createBlog = catchAsync(async (req, res) => {
+    const token = req.headers.authorization
+    const userId = getUserIdFromToken(token as string)
     const payload = req.body
+    payload.author = userId
     const result = await blogService.createBlogIntoDB(payload)
-    sendResponse(res, { statusCode: StatusCodes.CREATED, message: "Blog create successfully", data: result })
+    sendResponse(res, {
+        statusCode: StatusCodes.CREATED,
+        message: "Blog create successfully",
+        data: {
+            _id: result._id,
+            title: result.title,
+            content: result.content,
+            author: result.author
+        }
+    })
 })
 
 const getAllBlogs = catchAsync(async (req: Request, res: Response) => {
@@ -19,7 +33,15 @@ const updateBlog = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params
     const data = req.body
     const result = await blogService.updateBlogToDB(id, data)
-    sendResponse(res, { statusCode: StatusCodes.OK, message: "Blog update successfully", data: result })
+    sendResponse(res, { 
+        statusCode: StatusCodes.OK, 
+        message: "Blog update successfully", 
+        data: {
+            _id: result?._id,
+            title: result?.title,
+            content: result?.content,
+            author: result?.author
+        } })
 })
 
 const deleteBlog = catchAsync(async (req: Request, res: Response) => {
@@ -30,7 +52,7 @@ const deleteBlog = catchAsync(async (req: Request, res: Response) => {
 
 export const blogController = {
     createBlog,
-    getAllBlogs,   
+    getAllBlogs,
     updateBlog,
     deleteBlog
 }

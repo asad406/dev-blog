@@ -14,17 +14,18 @@ const register = async (payload: IUser) => {
 const login = async (payload: { email: string; password: string }) => {
     const user = await User.findOne({email: payload?.email})
     if(!user) {
-        throw new AppError(StatusCodes.NOT_FOUND as number,'User is not found')
+        throw new AppError(StatusCodes.UNAUTHORIZED as number,'User is not found')
     }
     const isBlocked = user?.isBlocked
     if (isBlocked === true){
-        throw new AppError(StatusCodes.NOT_FOUND, "User is blocked")
+        throw new AppError(StatusCodes.UNAUTHORIZED, "User is blocked")
     }
     const isPasswordMatch = await bcrypt.compare(payload?.password, user?.password)
     if(!isPasswordMatch){
-        throw new AppError(StatusCodes.NOT_FOUND,"Incorrect password")
+        throw new AppError(StatusCodes.UNAUTHORIZED,"Incorrect password")
     }
-    const token = jwt.sign({email: user?.email, role: user?.role}, config.jwt_secret as string, {expiresIn: '30d'})
+  
+    const token = jwt.sign({email: user?.email, role: user?.role, userId:user?._id}, config.jwt_secret as string, {expiresIn: '30d'})
    
     return {token, user}
 }
