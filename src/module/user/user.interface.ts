@@ -1,9 +1,9 @@
 interface IUser {
-    name: string,
-    email: string,
-    password: string,
-    role: "user" | "admin",
-    isBlocked: boolean
+  name: string;
+  email: string;
+  password: string;
+  role: 'user' | 'admin';
+  isBlocked: boolean;
 }
 
-export default IUser
+export default IUser;

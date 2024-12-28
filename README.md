@@ -10,12 +10,12 @@ My Dev Blog Server lets users create, update, delete, and view blog posts. It fe
 - [x] Can delete any blog.
 - [x] Can block any user.
 
-- **As User**: 
+- **As User**:
 - [x] Can register and log in.
 - [x] Can create blogs (only when logged in).
 - [x] Can update and delete their own blogs.
 
-- **Validation and Error Handling**: 
+- **Validation and Error Handling**:
 - [x] Ensure data validation using mongoose and zod validation and feedback suitable Error.
 
 ## Used Technology and Installation instruction
